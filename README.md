@@ -88,3 +88,61 @@ For OpenAI platform:
 OPENAI_API_KEY=sk-...
 OPENAI_BASE_URL=https://api.openai.com/v1
 OPENAI_MODEL=gpt-4o-mini
+
+Environment
+
+Copy and adjust:
+
+OPENAI_API_KEY=ollama
+OPENAI_BASE_URL=http://localhost:11434/v1
+OPENAI_MODEL=llama3.2:1b
+DATA_DIR=data
+MEMORY_PATH=chat_memory.json
+
+
+For OpenAI platform:
+
+OPENAI_API_KEY=sk-...
+OPENAI_BASE_URL=https://api.openai.com/v1
+OPENAI_MODEL=gpt-4o-mini
+
+🔄 Switching to Real Embeddings
+
+Install:
+
+pip install sentence-transformers
+
+
+Replace mini_flex/embeddings/hf_embed.py with:
+
+from sentence_transformers import SentenceTransformer
+from typing import List
+
+class HFEmbeddings:
+    def __init__(self, model_name: str = "sentence-transformers/all-MiniLM-L6-v2"):
+        self.model = SentenceTransformer(model_name)
+
+    def embed_texts(self, texts: List[str]):
+        return self.model.encode(texts, normalize_embeddings=True)
+
+
+Rebuild index:
+
+python build_index.py
+
+Common Commands
+# add new text files
+python build_index.py
+
+# ask via CLI
+python ask_rag.py
+
+# run Streamlit app
+streamlit run mini_flex/ui/app.py
+
+Troubleshooting
+Issue	Fix
+401 Unauthorized	Use a valid OpenAI key or Ollama
+ModuleNotFoundError: faiss	pip install faiss-cpu
+SentenceTransformers slow first run	Downloads model once (400MB)
+Ollama connection error	ollama serve then check http://localhost:11434/api/tags
