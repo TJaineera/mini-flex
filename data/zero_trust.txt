@@ -1,0 +1,4 @@
+Step 1: Implement strong identity verification (MFA, SSO).
+Step 2: Enforce least privilege access using role-based policies.
+Step 3: Continuously monitor and verify all devices.
+Step 4: Use micro-segmentation to isolate critical assets.
